@@ -2,27 +2,27 @@
 
 #nullable disable
 
-namespace Test.Migrations
+namespace Takeshi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrations : Migration
+    public partial class Weapon : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Armors",
+                name: "Weapons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArmorPoints = table.Column<int>(type: "int", nullable: false),
-                    PotionSlots = table.Column<int>(type: "int", nullable: false)
+                    DamagePoints = table.Column<int>(type: "int", nullable: false),
+                    HeroClassType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Armors", x => x.Id);
+                    table.PrimaryKey("PK_Weapons", x => x.Id);
                 });
         }
 
@@ -30,7 +30,7 @@ namespace Test.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Armors");
+                name: "Weapons");
         }
     }
 }

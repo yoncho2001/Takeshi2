@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Takeshi.Models;
 using Test.Models;
 
 namespace Test.Controllers
@@ -8,9 +10,9 @@ namespace Test.Controllers
     [ApiController]
     public class ArmorsController : ControllerBase
     {
-        private readonly ArmorContext _context;
+        private readonly Context _context;
 
-        public ArmorsController(ArmorContext context)
+        public ArmorsController(Context context)
         {
             _context = context;
         }
@@ -23,7 +25,10 @@ namespace Test.Controllers
           {
               return NotFound();
           }
-            return await _context.Armors.ToListAsync();
+            var armorProxies =  await _context.Armors.ToListAsync();
+            var armors = armorProxies.Select(ap => new Armor(ap.Id, ap.Name, ap.ArmorPoints)).ToList();
+
+            return armors;
         }
 
         // GET: api/Armors/5
@@ -34,7 +39,8 @@ namespace Test.Controllers
           {
               return NotFound();
           }
-            var armor = await _context.Armors.FindAsync(id);
+            var armorProxy = await _context.Armors.FindAsync(id);
+            var armor = new Armor(armorProxy.Id, armorProxy.Name, armorProxy.ArmorPoints);
 
             if (armor == null)
             {
@@ -46,7 +52,7 @@ namespace Test.Controllers
 
         // PUT: api/Armors/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArmor(int id, Armor armor)
+        public async Task<IActionResult> PutArmor(int id, ArmorProxy armor)
         {
             if (id != armor.Id)
             {
@@ -76,7 +82,7 @@ namespace Test.Controllers
 
         // POST: api/Armors
         [HttpPost]
-        public async Task<ActionResult<Armor>> PostArmor(Armor armor)
+        public async Task<ActionResult<Armor>> PostArmor(ArmorProxy armor)
         {
           if (_context.Armors == null)
           {

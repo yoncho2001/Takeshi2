@@ -2,17 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Test.Models;
 
 #nullable disable
 
-namespace Test.Migrations
+namespace Takeshi.Migrations
 {
-    [DbContext(typeof(ArmorContext))]
-    partial class ArmorContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(Context))]
+    [Migration("20231024083323_Takeshi")]
+    partial class Takeshi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,7 @@ namespace Test.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Test.Models.Armor", b =>
+            modelBuilder.Entity("Takeshi.Models.ArmorProxy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,12 +39,32 @@ namespace Test.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PotionSlots")
+                    b.HasKey("Id");
+
+                    b.ToTable("Armors");
+                });
+
+            modelBuilder.Entity("Takeshi.Models.PotionProxy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AffectingField")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AffectingValue")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("Potions");
                 });
 #pragma warning restore 612, 618
         }
